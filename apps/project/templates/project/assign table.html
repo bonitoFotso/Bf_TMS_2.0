@@ -1,0 +1,211 @@
+{% load static %}
+<div id="kt_app_content" class="app-content pb-0">
+  <!--begin::Products-->
+  <div class="card card-flush">
+    <!--begin::Card header-->
+    <div class="card-header align-items-center py-5 gap-2 gap-md-5">
+      <!--begin::Card title-->
+      <div class="card-title">
+        <!--begin::Search-->
+
+        <!--end::Search-->
+      </div>
+      <!--end::Card title-->
+      <!--begin::Card toolbar-->
+      <div class="card-toolbar flex-row-fluid justify-content-end gap-5">
+        <!--begin::Add product-->
+        <button type="button" class="btn btn-primary px-3" data-bs-toggle="modal" data-bs-target="#add_taches">
+          Creer une Tache
+        </button>
+        <button type="button" class="btn btn-primary px-3" data-bs-toggle="modal" data-bs-target="#kt_modal_create_app">
+          Creer une Tache2
+        </button>
+        <!--end::Add product-->
+      </div>
+      <!--end::Card toolbar-->
+    </div>
+    <!--end::Card header-->
+    <!--begin::Card body-->
+    <div class="card-body table-responsive pt-0">
+      <!--begin::Table-->
+      <table class="dataTable align-middle table-row-dashed table-striped fs-6 " id="tache_list">
+        <thead>
+          
+          <tr class="text-start text-gray-400 fw-bold fs-7 text-uppercase gs-0">
+            <th class="w-1px pe-2">
+              <div class="form-check form-check-sm form-check-custom form-check-solid me-3">
+                <input class="form-check-input" type="checkbox" data-kt-check="true" data-kt-check-target="#tache_list .form-check-input" value="1" />
+              </div>
+            </th>
+            
+            {% for tf in field %}
+            <th class="min-w-20px text-end"> {{tf}} </th>
+            {% endfor %}
+            <th class="min-w-20px text-end">Action</th>
+          </tr>
+        </thead>
+        <tbody class="fw-semibold text-gray-600">
+
+          {% for t in taches %}
+          <tr class="  {% if t.ok  %} bg-success  {% endif %} ">
+            <td>
+              <div class="form-check form-check-sm form-check-custom form-check-solid">
+                <input class="form-check-input" type="checkbox" value="1" />
+              </div>
+            </td>
+            <td>
+              <div class="d-flex align-items-center">
+                <!--begin::Thumbnail-->
+                
+                <!--end::Thumbnail-->
+                <div class="ms-5">
+                  <!--begin::Title-->
+                  <a href="#" class="text-gray-800 text-hover-primary fs-5 fw-bold" >{{t.nom}}</a>
+                  <!--end::Title-->
+                </div>
+              </div>
+            </td>
+            <td class="text-end pe-0">
+              <span class="fw-bold">{{t.createdAt}}</span>
+            </td>
+            <td class="text-end pe-0"><span class="fw-bold">{{t.appelant.name}}:{{t.appelant.agence.name}}</span></td>
+            <td class=" pe-0  {% if t.priorite == 'Elever' %} bg-danger {% elif t.priorite == 'Moyen'%} bg-warning {% else %} bg-secondary {% endif %}">
+              <!--begin::Badges-->
+              {{t.priorite}}
+              <!--end::Badges-->
+              
+            </td>
+            <td class="text-end pe-0" data-order="Scheduled">
+              <!--begin::Badges-->
+              <div class="badge badge-light-primary">{{t.status}}</div>
+              <!--end::Badges-->
+            </td>
+            <td class="text-end pe-0">
+              <span class="fw-bold">{{t.date_debut}}</span>
+            </td>
+            <td class="text-end pe-0">{% for i in t.technicientache_set.all %}
+              <div class="">
+          <span class="fw-bold">{{i.technicien.nom}}</span></div>
+          {% endfor %}
+            </td>
+            <td class="text-end pe-0">
+              <span class="fw-bold">{{t.date_fin}}</span>
+            </td>
+            <td class="text-end pe-0">
+              <span class="fw-bold">{{t.n_OS}}</span>
+            </td>
+            <td class="text-end">
+              <button class="btn btn-info btn-sm task-info-button" data-task-id="{{ t.id }}">Info</button>
+
+            </td>
+          </tr>
+
+          {% include 'modal/task_info_modal.html' %}
+          
+        
+          {% endfor %}
+    </tbody>
+      </table>
+      <!--end::Table-->
+    </div>
+    <!--end::Card body-->
+  </div>
+  <!--end::Products-->
+</div>
+{% include 'project/tache_f.html' %}
+{% include 'modal/create-app/_main.html' %}
+<script src="{% static 'assets/plugins/custom/datatables/js/jquery.js' %}"></script>
+<script src="{% static 'assets/plugins/DataTables/datatables.js' %}"></script>
+
+<script>
+  $(document).ready(function () {
+    $('.task-info-button').on('click', function () {
+        var taskId = $(this).data('task-id');
+        $.ajax({
+            url: 'get_task_info/', // L'URL de votre vue AJAX
+            data: { task_id: taskId },
+            dataType: 'json',
+            success: function (data) {
+              console.log(data);
+                if ('task_info' in data) {
+                    // Affichez les données dans le modal
+                    $('#m_title').html(data.task_info.nom);
+                    $('#r1_c1').html(data.task_info.client);
+                    $('#r1_c2').html(data.task_info.appelant);
+                    $('#r1_c3').html(data.task_info.priorite);
+
+                    $('#r2_c1').html(data.task_info.activite);
+                    $('#r2_c2').html(data.task_info.categorie);
+                    $('#r2_c3').html(data.task_info.status);
+                    $('#taskInfoModal').modal('show');
+                } else {
+                    // Gérez l'erreur si la tâche n'est pas trouvée
+                    alert('Tâche non trouvée.');
+                }
+            },
+            error: function () {
+                // Gérez l'erreur AJAX
+                alert('Erreur lors de la récupération des informations de la tâche.');
+            }
+        });
+    });
+});
+
+//  $(document).ready(function() {
+//    AjaxDatatableViewUtils.initialize_table(
+//        $('#tache_listf'),
+//        "{% url 'tt' %}",
+//        {
+//            // extra_options (example)
+//            processing: true,
+//            autoWidth: false,
+//            full_row_select: true, 
+//            scrollX: true,
+//            
+//        }, {
+//            // extra_data
+//            // ...
+//        },
+//    );
+//});
+
+  $("#tache_list").DataTable();
+  //function atts(nom) {
+  //  var element = document.getElementById('form_att_'+nom);
+  //  var ta = document.getElementById(nom+'_id').value;
+  //  tec = document.querySelector('[name=tec_'+nom+']').value;
+  //  $.ajax({
+  //    type: 'POST',
+  //    url: "{% url 'att' %}",
+  //    data: {'tec':tec,
+  //    'ta':ta,
+  //    'csrfmiddlewaretoken': '{{csrf_token}}',
+  //            },
+//
+  //})
+  //.done(function(data){
+  //})
+  //};
+  //document.querySelector("#subm").addEventListener("click", event => {
+  //  event.preventDefault();
+  //  tec = document.querySelector('[name=att]').value;
+  //  ta = document.querySelector('[name=tache]').value;
+  //  alert(tec);
+  //  $.ajax({
+  //    type: 'POST',
+  //    url: "{% url 'att' %}",
+  //    data: {'tec':tec,
+  //    'ta':ta,
+  //    'csrfmiddlewaretoken': '{{csrf_token}}',
+  //            },
+//
+  //})
+  //.done(function(data){
+  //  alert(data.a);
+  //})
+//
+  //});
+  
+  
+  
+</script>

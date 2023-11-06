@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %} detail {% endblock %} 
+
+{% block content %}
+    
+        <div class="page-content" >
+            <div class="" role="document">
+                <div class="modal-content">
+                    <div class="section-body">
+                        <div class="container-fluid">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <ul class="nav nav-tabs page-header-tab">
+                                    <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#todo-list">Detail de la Taches : {{object.nom}} </a></li>
+                                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#todo-add">editer la Tache: {{object.nom}} </a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    {% include 'project/inc/section.html' %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+
+{% endblock content %}
+
+{% block js %}
+<script src="{% static 'assets/js/custom/utilities/modals/create-app.js' %}"></script>
+
+{% endblock js %}

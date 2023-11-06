@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Task {% endblock title %}
+{% block content %}
+
+
+
+
+    <div class="page-inner mt--5">
+        <div class="row clearfix">
+            <div class="col" id="orderStatisticsChart"></div>
+            <div class="col" id="priorityChart"></div>
+            
+        </div>
+    </div>
+        
+        
+
+        {% include 'project/assign table.html' %}
+        <script src="{% static 'assets/js/apexcharts.js' %}"></script>
+<script>
+        const chartOrderStatistics = document.querySelector('#orderStatisticsChart'),
+    orderChartConfig = {
+      chart: {
+        height: 200,
+        width: 200,
+        type: 'pie'
+      },
+      labels: ['en cour', 'effectuer', ],
+      series: [{{ incomplet }} , {{complet}},],
+      //colors: [config.colors.primary, config.colors.secondary, config.colors.info, config.colors.success],
+      stroke: {
+        width: 0,
+        //colors: cardColor
+      },
+      dataLabels: {
+        enabled: false,
+        formatter: function (val, opt) {
+          return parseInt(val) + '%';
+        }
+      },
+      legend: {
+        show: false
+      },
+      grid: {
+        padding: {
+          top: 0,
+          bottom: 0,
+          right: 15
+        }
+      },
+      plotOptions: {
+        pie: {
+          donut: {
+            size: '75%',
+            labels: {
+              show: true,
+              value: {
+                fontSize: '1.5rem',
+                fontFamily: 'Public Sans',
+                //color: headingColor,
+                offsetY: -15,
+                formatter: function (val) {
+                  return parseInt(val) + '';
+                }
+              },
+              name: {
+                offsetY: 20,
+                fontFamily: 'Public Sans'
+              },
+              total: {
+                show: true,
+                fontSize: '0.8125rem',
+                //color: axisColor,
+                label: 'pourcentage',
+                formatter: function (w) {
+                  return '{{pourcent}}%';
+                }
+              }
+            }
+          }
+        }
+      }
+    };
+  if (typeof chartOrderStatistics !== undefined && chartOrderStatistics !== null) {
+    const statisticsChart = new ApexCharts(chartOrderStatistics, orderChartConfig);
+    statisticsChart.render();
+  };
+
+const chartPriority = document.querySelector('#priorityChart');
+
+const priorityChartConfig = {
+  chart: {
+    height: 200,
+    width:200,
+    type: 'bar',
+  },
+  xaxis: {
+    categories: ['Bas', 'Moyen', 'Elever',], // Ajoutez les catégories en fonction de vos priorités
+  },
+  series: [{
+    name: 'Nombre de tâches',
+    data: [{{ nb_tasks_bas }}, {{ nb_tasks_moyen }}, {{ nb_tasks_elever }},], // Ajoutez le nombre de tâches pour chaque priorité
+  }],
+  colors: ['#2ecc71', '#3498db','#f96332', ],
+};
+
+if (chartPriority) {
+  const priorityChart = new ApexCharts(chartPriority, priorityChartConfig);
+  priorityChart.render();
+}
+
+
+</script>
+        
+{% endblock content %}

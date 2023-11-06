@@ -86,5 +86,13 @@ class User(AbstractBaseUser):
     class Meta:
         db_table = 'User'
 
+class UserToken(models.Model):
+    user_id = models.IntegerField()
+    token = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
+    expired_at = models.DateTimeField()
 
 
+class Reset(models.Model):
+    email = models.CharField(max_length=255)
+    token = models.CharField(max_length=255, unique=True)
