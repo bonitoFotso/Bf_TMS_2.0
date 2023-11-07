@@ -22,6 +22,7 @@ class LoginApi(APIView, mixins.HttpResponseMixin):
     def post(self, request, *args, **kwargs):
         username = request.data.get("email")
         password = request.data.get("password")
+        print(request)
         if not username or not password:
             return self.error_response(message="Must Provide user id and password")
         user: User = authenticate(username=username, password=password)
@@ -38,8 +39,8 @@ class LoginApi(APIView, mixins.HttpResponseMixin):
                 "helpdesk":user.is_helpdesk, 
                 "tech":user.is_technicien 
                     },
-            "access_token": tokens.get("access_token"),
-            "refresh_token": tokens.get("refresh_token"),
+            "token": tokens.get("access_token"),
+            "refresh": tokens.get("refresh_token"),
         }
         return self.success_response(message="Login success", data=data)
 

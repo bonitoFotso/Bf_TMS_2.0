@@ -2,6 +2,9 @@ from django.urls import path
 from .views import (TacheListCreateView, TacheDetailView, CategorieListCreateView, CategorieDetailView, ActiviteListCreateView, ActiviteDetailView, AppelantListCreateView, AppelantDetailView,
 ClientListCreateView, ClientDetailView, AgenceListCreateView, AgenceDetailView,TechnicienListCreateView,TechnicienDetailView, UserProfileView
 )
+from rest_framework_simplejwt.views import (
+    TokenRefreshView,
+)
 from .auth_views import *
 
 urlpatterns = [
@@ -28,8 +31,10 @@ urlpatterns = [
     path('techniciens/', TechnicienListCreateView.as_view(), name='technicien-list-create'),
     path('techniciens/<int:pk>/', TechnicienDetailView.as_view(), name='technicien-detail'),
     #
-    path('llogin/', LoginApi.as_view()),
-    path('rregister/', RegisterApi.as_view()),
+    path('login/', LoginApi.as_view()),
+    path('register/', RegisterApi.as_view()),
     # Ajoutez des URL similaires pour les modèles Agence et Appelant si nécessaire
-    path('profile', UserProfileView.as_view(), name='profile'),
+    path('profile/', UserProfileView.as_view(), name='profile'),
+    path('refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+
 ]
