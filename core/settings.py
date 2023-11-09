@@ -167,9 +167,10 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
+DEFAULT_FILE_STORAGE = 'core.storage.CustomStorage'
 
 STATIC_URL = '/static/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'account/media')
 MEDIA_URL = '/media/'
 
 # Default primary key field type

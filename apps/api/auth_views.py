@@ -20,29 +20,30 @@ class LoginApi(APIView, mixins.HttpResponseMixin):
     authentication_classes = ()
 
     def post(self, request, *args, **kwargs):
-        username = request.data.get("email")
+        email = request.data.get("email")
         password = request.data.get("password")
-        print(request)
-        if not username or not password:
-            return self.error_response(message="Must Provide user id and password")
-        user: User = authenticate(username=username, password=password)
+
+        if not email or not password:
+            return self.error_response(message="Must provide email and password")
+
+        user = authenticate(username=email, password=password)
+
         if not user:
-            return self.error_response(message="Invalid Credentials")
+            return self.error_response(message="Invalid credentials")
+
         tokens = get_tokens_for_user(user=user)
-        
+
+        user_serializer = UserSerializer(user)  # Utilisez le sérialisateur pour sérialiser l'objet utilisateur
+
         data = {
-            'success':'true',
-            "user": {
-                "_id": user.pk, 
-                "email": user.email, 
-                "admin":user.admin,
-                "helpdesk":user.is_helpdesk, 
-                "tech":user.is_technicien 
-                    },
+            'success': 'true',
+            "user": user_serializer.data,  # Utilisez les données sérialisées de l'utilisateur
             "token": tokens.get("access_token"),
             "refresh": tokens.get("refresh_token"),
         }
-        return self.success_response(message="Login success", data=data)
+
+        return Response(data, status=status.HTTP_200_OK)
+
 
 
 class RegisterApi(APIView, mixins.HttpResponseMixin):

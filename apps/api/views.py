@@ -90,3 +90,12 @@ class UserProfileView(generics.RetrieveUpdateAPIView):
     def get_object(self):
         # Renvoyer l'utilisateur actuellement connecté
         return self.request.user
+
+class TechnicienView(generics.RetrieveUpdateAPIView):
+    queryset = Technicien.objects.all()
+    serializer_class = TechnicienSerializer
+    permission_classes = []
+
+    def get_object(self):
+        # Renvoyer le technicien actuellement connecté
+        return self.request.user.technicien

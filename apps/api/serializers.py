@@ -4,10 +4,9 @@ from apps.clients.models import  Appelant,Client,Agence
 from apps.ressource.models import Technicien
 from account.models import User
 
-
 class TacheSerializer(serializers.ModelSerializer):
-    activite_nom = serializers.CharField(source='activite.nom')
-    categorie_nom = serializers.CharField(source='categorie.nom')
+    #activite_nom = serializers.CharField(source='activite.nom')
+    #categorie_nom = serializers.CharField(source='categorie.nom')
     appelant_nom = serializers.CharField(source='appelant.name')
 
     class Meta:
@@ -53,7 +52,7 @@ class TechnicienSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'email', 'name', 'is_helpdesk', 'is_technicien', 'active', 'staff', 'admin', 'timestamp', 'is_manager', 'is_team_leader','password')
+        fields = ('id', 'email','profile', 'name', 'is_helpdesk', 'is_technicien', 'active', 'staff', 'admin', 'timestamp', 'is_manager', 'is_team_leader','password')
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):

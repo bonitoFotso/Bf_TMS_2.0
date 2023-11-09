@@ -42,6 +42,8 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser):
     email = models.CharField(max_length=255, unique=True)
     name = models.CharField(max_length=255)
+    profile = models.ImageField(upload_to='profile/', blank=True, null=True)
+
     is_helpdesk = models.BooleanField(default=False)
     is_technicien  = models.BooleanField(default=True)
     active      = models.BooleanField(default=True) # can login 

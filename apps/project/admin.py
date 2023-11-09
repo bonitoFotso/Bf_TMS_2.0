@@ -20,7 +20,7 @@ admin.site.register(Activite, ActiviteAdmin)
 
 @admin.register(Tache)
 class TacheAdmin(admin.ModelAdmin):
-    list_display = ('nom','appelant', 'status','activite','categorie', 'n_OS','priorite', 'ok', 'date_debut', 'date_fin')
+    list_display = ('nom','appelant', 'status', 'n_OS','priorite', 'ok', 'date_debut', 'date_fin')
     list_filter = ('categorie', 'activite', 'appelant', 'priorite', 'ok')
     search_fields = ('nom', 'description')
     date_hierarchy = 'createdAt'

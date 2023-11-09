@@ -63,8 +63,8 @@ class Tache(models.Model):
     ('Moyen', 'Moyen'),
     ('Élevé', 'Élevé'),
 ]
-    activite = models.ForeignKey(Activite, verbose_name=_("Activite"), on_delete=models.CASCADE)
-    categorie = models.ForeignKey(Categorie, verbose_name=_("Categorie"), on_delete=models.CASCADE)
+    activite = models.ManyToManyField(Activite, verbose_name=_("Activite"), )
+    categorie = models.ManyToManyField(Categorie, verbose_name=_("Categorie"), )
     nom = models.CharField(_("intitule"), max_length=200,)
     status = models.CharField(choices=STATUS_CHOICES, max_length=20, default="En attente")  # Choix de statut
     appelant = models.ForeignKey(Appelant, verbose_name=_("Celui qui appelle"), on_delete=models.CASCADE)
