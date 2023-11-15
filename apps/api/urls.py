@@ -1,7 +1,6 @@
 from django.urls import path
 from .views import (
-    TacheListCreateView,
-    TacheDetailView,
+    
     CategorieListCreateView,
     CategorieDetailView,
     ActiviteListCreateView,
@@ -22,10 +21,15 @@ from rest_framework_simplejwt.views import (
 )
 from .client_view import ClientChartDataView,ClientAgenceChart,ClientDetailViewData
 from .auth_views import *
+from .tache_views import (TacheListCreateView,TacheDetailView, AllView, TacheCreateView )
 
 urlpatterns = [
     path("taches/", TacheListCreateView.as_view(), name="tache-list-create"),
+    path("taches-c/", TacheCreateView.as_view(), name="tache-create"),
+
     path("taches/<int:pk>", TacheDetailView.as_view(), name="taches-detail"),
+    path("all/", AllView.as_view(), name="all"),
+
     path(
         "categories/", CategorieListCreateView.as_view(), name="categorie-list-create"
     ),

@@ -9,14 +9,10 @@ from apps.ressource.models import Technicien
 from rest_framework.permissions import IsAuthenticated
 from account.models import User
 from .serializers import UserSerializer
+from rest_framework import filters
 
-class TacheListCreateView(generics.ListCreateAPIView):
-    queryset = Tache.objects.all()
-    serializer_class = TacheSerializer
-    
-class TacheDetailView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Tache.objects.all()
-    serializer_class = TacheSerializer
+
+
 #class TechnicienTacheListCreateView(generics.ListCreateAPIView):
 #    queryset = TechnicienTache.objects.all()
 #    serializer_class = TechnicienTacheSerializer
